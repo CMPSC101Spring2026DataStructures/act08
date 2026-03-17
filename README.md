@@ -5,7 +5,7 @@ Activity 08: Socket Programming with Classes and Exceptions - Chat & Game App
 ## Assigned and Due
 
 - **Assigned**: Wednesday, 18 March 2026 at start of class
-- **Due and Expiration**: Friday, 20 March 2026 at start of class
+- **Due and Expiration**: Monday, 23 March 2026 at start of class
 
 Note: the expiration date is the last date you can submit your work for a grade.
 
@@ -67,9 +67,12 @@ By completing this activity, you will be able to:
 
 Work through the tutorials in order:
 
-1. **Tutorial 1** (`tutorials/tutorial_01/tutorial_01.md`): Create the message server with threading and exception handling
-2. **Tutorial 2** (`tutorials/tutorial_02/tutorial_02.md`): Build the client with colored output and user-friendly interface
-3. **Tutorial 3** (`tutorials/tutorial_03/tutorial_03.md`): Connect, communicate, and play games!
+1. This class,
+   - **Tutorial 1** (`tutorials/tutorial_01/tutorial_01.md`): Create the message server with threading and exception handling
+2. This class,
+   - **Tutorial 2** (`tutorials/tutorial_02/tutorial_02.md`): Build the client with colored output and user-friendly interface
+3. Next class
+   - **Tutorial 3** (`tutorials/tutorial_03/tutorial_03.md`): Connect, communicate, experiment aand play games!
 
 Each tutorial provides:
 
@@ -78,13 +81,14 @@ Each tutorial provides:
 - Instructions for running and testing your code
 - Tips for troubleshooting common issues
 
-**Time Estimate**: 
+**Time Estimate**:
 
-- Building (Tutorials 1-2): ~20 minutes
-- Testing & Playing (Tutorial 3): ~15 minutes
-
+- Building (Tutorials 1-2): This class
+- Testing & Playing (Tutorial 3): Next class
 
 ## Deliverable
+
+This is a check mark grade.
 
 After completing all tutorials, submit:
 
@@ -119,6 +123,7 @@ gatorgrade --config config/gatorgrade.yml
 ```
 
 This will verify that you have:
+
 - Created all required source files
 - Completed the reflection document
 - Included required code elements (classes, exceptions, functions)

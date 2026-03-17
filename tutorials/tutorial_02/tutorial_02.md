@@ -1,5 +1,7 @@
 # Tutorial 2: Building the Message Client
 
+**To be completed during *this* class**
+
 ## Overview
 
 In this tutorial, you will create a **colorful message client** that connects to your server. The client will:
@@ -266,6 +268,27 @@ class MessageClient:
         print(f"{'='*60}{Style.RESET_ALL}\n")
 
 
+def get_local_ip():
+    """
+    Get the local IP address of this machine.
+    Returns a string like '192.168.1.100'
+    """
+    try:
+        # Create a temporary socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        
+        # Connect to an external address (doesn't actually send data)
+        # This helps us determine which network interface to use
+        s.connect(("8.8.8.8", 80))
+        
+        # Get our IP address
+        ip_address = s.getsockname()[0]
+        
+        s.close()
+        return ip_address
+    except Exception:
+        return "127.0.0.1"  # Fallback to localhost
+
 def main():
     """
     Main function to create and start the client.
@@ -275,7 +298,12 @@ def main():
     print(f"\n{Back.CYAN}{Fore.BLACK}{'='*60}{Style.RESET_ALL}")
     print(f"{Back.CYAN}{Fore.BLACK}  🌟 WELCOME TO THE MESSAGE CLIENT! 🌟  {Style.RESET_ALL}")
     print(f"{Back.CYAN}{Fore.BLACK}{'='*60}{Style.RESET_ALL}\n")
-    
+
+    print(f"\n{Fore.CYAN}{'='*35}{Style.RESET_ALL}")
+    my_ip = get_local_ip()
+    print(f"{Fore.CYAN}Your IP address is: {my_ip} {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}{'='*35}{Style.RESET_ALL}")
+
     # Get username from user
     username = input(f"{Fore.YELLOW}Enter your username: {Style.RESET_ALL}").strip()
     
@@ -285,13 +313,25 @@ def main():
     
     print(f"{Fore.GREEN}✅ Username set to: {username}{Style.RESET_ALL}\n")
     
+    # Get the IP address to connect to
+    msg = f"\n{Fore.YELLOW}🙂 Enter the IP address of the server to connect to (default: {Fore.CYAN}{my_ip}{Fore.YELLOW}): {Style.RESET_ALL}"
+
+    myNew_ip = input(msg).strip()
+    if myNew_ip:
+        my_ip = "localhost"
+
+    msg = f"{Fore.GREEN}✅ Connecting to server at {my_ip}:{5555}...{Style.RESET_ALL}"
+    print(msg)
+
     # Create and start client
-    client = MessageClient(host='localhost', port=5555, username=username)
+    # client = MessageClient(host='localhost', port=5555, username=username)
+    client = MessageClient(host=my_ip, port=5555, username=username)
     client.start()
 
 
 if __name__ == "__main__":
     main()
+
 ```
 
 ![--- --- --- --- --- --- --- --- ---](../../graphics/div_bar.png)
@@ -399,6 +439,52 @@ cd tutorials/
 uv run tutorial_02/src/message_client.py
 ```
 
+### Understanding IP Address Selection
+
+When you start the client, it will display your local IP address and prompt you for configuration:
+
+```
+===================================
+Your IP address is: 192.168.1.100
+===================================
+
+Enter your username: Alice
+✅ Username set to: Alice
+
+🙂 Enter the IP address of the server to connect to (default: 192.168.1.100):
+```
+
+**How it works:**
+
+1. **Automatic IP Detection**: The `get_local_ip()` function automatically detects your computer's IP address on the local network
+
+2. **Three Connection Options**:
+   - **Press Enter (use detected IP)**: Connect to a server running on your local network using your IP
+   - **Type anything and press Enter (use localhost)**: Connect to `localhost` (127.0.0.1) for local testing
+   - **Type a specific IP address**: Connect to a server running on a classmate's computer (e.g., `192.168.1.50`)
+
+3. **When to use each option**:
+   - **Use localhost** (type anything): Connecting to a server running on your own computer
+   - **Use your IP** (press Enter): Connecting to a server on the network using your detected IP
+   - **Use a specific IP**: Connecting to a classmate's server (ask them for their IP address)
+
+### Connection Example Scenarios
+
+**Scenario 1: Testing on your own computer**
+- Server running on your machine with localhost
+- Client: Type anything when prompted (uses localhost)
+- Result: Client connects to local server
+
+**Scenario 2: Connecting to a classmate's server**
+- Classmate's server running at `192.168.1.50`
+- Client: Type `192.168.1.50` when prompted
+- Result: Client connects to classmate's server
+
+**Scenario 3: Connecting to your own server on the network**
+- Your server running at your IP `192.168.1.100`
+- Client: Press Enter (uses detected IP)
+- Result: Client connects to your server via network
+
 You'll be prompted for a username:
 
 ```
@@ -410,7 +496,7 @@ Enter your username: Alice
 ✅ Username set to: Alice
 ```
 
-After entering your username, you should see:
+After entering your username and server IP, you should see:
 
 ```
 ============================================================

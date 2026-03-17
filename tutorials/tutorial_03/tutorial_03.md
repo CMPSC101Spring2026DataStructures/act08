@@ -1,5 +1,7 @@
 # Tutorial 3: Communicating and Playing Games
 
+**To be completed during *next* class**
+
 ## Overview
 
 In this final tutorial, you will:
@@ -422,12 +424,38 @@ class GameClient:
             self.display_score()
 
 
+def get_local_ip():
+    """
+    Get the local IP address of this machine.
+    Returns a string like '192.168.1.100'
+    """
+    try:
+        # Create a temporary socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        
+        # Connect to an external address (doesn't actually send data)
+        # This helps us determine which network interface to use
+        s.connect(("8.8.8.8", 80))
+        
+        # Get our IP address
+        ip_address = s.getsockname()[0]
+        
+        s.close()
+        return ip_address
+    except Exception:
+        return "127.0.0.1"  # Fallback to localhost
+
 def main():
     """Main function to start the game client."""
     # Display banner
     print(f"\n{Back.MAGENTA}{Fore.WHITE}{'='*60}{Style.RESET_ALL}")
     print(f"{Back.MAGENTA}{Fore.WHITE}  🎮 WELCOME TO ROCK, PAPER, SCISSORS! 🎮  {Style.RESET_ALL}")
     print(f"{Back.MAGENTA}{Fore.WHITE}{'='*60}{Style.RESET_ALL}\n")
+
+    print(f"\n{Fore.CYAN}{'='*35}{Style.RESET_ALL}")
+    my_ip = get_local_ip()
+    print(f"{Fore.CYAN}Your IP address is: {my_ip} {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}{'='*35}{Style.RESET_ALL}")
     
     # Get username
     username = input(f"{Fore.YELLOW}Enter your player name: {Style.RESET_ALL}").strip()
@@ -437,8 +465,19 @@ def main():
         
     print(f"{Fore.GREEN}✅ Welcome, {username}!{Style.RESET_ALL}")
     
+    # Get the IP address to connect to
+    msg = f"\n{Fore.YELLOW}🙂 Enter the IP address of the server to connect to (default: {Fore.CYAN}{my_ip}{Fore.YELLOW}): {Style.RESET_ALL}"
+
+    myNew_ip = input(msg).strip()
+    if myNew_ip:
+        my_ip = "localhost"
+
+    msg = f"{Fore.GREEN}✅ Connecting to server at {my_ip}:{5555}...{Style.RESET_ALL}"
+    print(msg)
+    
     # Create and start client
-    client = GameClient(host='localhost', port=5555, username=username)
+    # client = GameClient(host='localhost', port=5555, username=username)
+    client = GameClient(host=my_ip, port=5555, username=username)
     client.start()
 
 
@@ -502,9 +541,34 @@ print(f"{Back.MAGENTA}{Fore.WHITE}  🎮 GAME! 🎮  {Style.RESET_ALL}")
 
 ## Part 4: Play the Game!
 
+### Understanding IP Address Connection
+
+Like the message client in Tutorial 2, the game client now includes IP address detection and selection. When you start the game, you'll see:
+
+```
+============================================================
+  🎮 WELCOME TO ROCK, PAPER, SCISSORS! 🎮
+============================================================
+
+===================================
+Your IP address is: 192.168.1.100
+===================================
+
+Enter your player name: Player1
+✅ Welcome, Player1!
+
+🙂 Enter the IP address of the server to connect to (default: 192.168.1.100):
+```
+
+**Connection Options for Game Players:**
+
+1. **Solo Testing (localhost)**: Type anything to connect to `localhost` for local testing
+2. **Network Play (your IP)**: Press Enter to connect using your detected IP address
+3. **Connect to Classmate**: Type their IP address to join their game server
+
 ### Solo Testing (vs Computer)
 
-1. Start the server (Tutorial 1)
+1. Start the server (Tutorial 1) on localhost
 2. Navigate to the tutorials directory and run the game client:
 
 ```bash
@@ -512,18 +576,51 @@ cd tutorials/
 uv run tutorial_03/src/game_client.py
 ```
 
-3. Enter your name
-4. Select option 2 (Play against computer)
-5. Choose rock, paper, or scissors
-6. Play multiple rounds!
+3. Enter your name (e.g., "Player1")
+4. When prompted for IP:
+   - Type anything (e.g., "local") and press Enter to use localhost
+5. Select option 2 (Play against computer)
+6. Choose rock, paper, or scissors
+7. Play multiple rounds!
 
-### Multiplayer (vs Friends)
+### Multiplayer (vs Friends) - Same Computer
 
-1. Make sure the server is running
-2. Start the game client on multiple computers (or terminals)
-3. Each player selects option 1 (Play against another player)
-4. Players take turns announcing moves
-5. Compare results and celebrate wins!
+For testing with multiple clients on the same computer:
+
+1. Start the server on localhost (Tutorial 1)
+2. Open 2-3 terminal windows
+3. In each terminal, start the game client:
+   ```bash
+   cd tutorials/
+   uv run tutorial_03/src/game_client.py
+   ```
+4. For each client:
+   - Enter a different player name
+   - Type anything when prompted for IP (uses localhost)
+5. Each player selects option 1 (Play against another player)
+6. Players take turns announcing moves
+7. Compare results and celebrate wins!
+
+### Multiplayer (vs Friends) - Different Computers
+
+For networked gameplay with classmates:
+
+1. **Server Host**:
+   - Start the server (Tutorial 1)
+   - Note your IP address displayed (e.g., `192.168.1.100`)
+   - Press Enter to bind to your network IP
+   - Share your IP address with other players
+
+2. **Game Players**:
+   - Start the game client
+   - Enter your player name
+   - When prompted for server IP, type the host's IP address (e.g., `192.168.1.100`)
+   - Select option 1 (Play against another player)
+
+3. **Play the Game**:
+   - Players announce moves through the chat
+   - Compare results manually
+   - Keep playing and have fun!
 
 **Honor System**: In PvP mode, players announce their moves simultaneously. Don't change your move after seeing your opponent's choice!
 
@@ -535,7 +632,7 @@ Select option 3 to use the regular messaging feature without games.
 
 ## Part 5: Creative Extensions
 
-Want to make the game even better? Try these ideas:
+Got some time and want to make the game even better!? Try these ideas (or come up with your own!)
 
 ### **Add More Games**
 

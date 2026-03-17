@@ -1,5 +1,7 @@
 # Tutorial 1: Building the Message Server
 
+**To be completed during *this* class**
+
 ## Overview
 
 In this tutorial, you will create a **multi-client message server** using Python's socket programming. The server will:
@@ -286,13 +288,52 @@ class MessageServer:
         print(f"{Fore.GREEN}✅ Server stopped successfully{Style.RESET_ALL}")
 
 
+def get_local_ip():
+    """
+    Get the local IP address of this machine.
+    Returns a string like '192.168.1.100'
+    """
+    try:
+        # Create a temporary socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        
+        # Connect to an external address (doesn't actually send data)
+        # This helps us determine which network interface to use
+        s.connect(("8.8.8.8", 80))
+        
+        # Get our IP address
+        ip_address = s.getsockname()[0]
+        
+        s.close()
+        return ip_address
+    except Exception:
+        return "127.0.0.1"  # Fallback to localhost
+
 def main():
     """
     Main function to create and start the server.
     Includes keyboard interrupt handling for graceful shutdown.
     """
+
+    print(f"\n{Fore.CYAN}{'='*35}{Style.RESET_ALL}")
+    my_ip = get_local_ip()
+    print(f"{Fore.CYAN}Your IP address is: {my_ip} {Style.RESET_ALL}")
+    print(f"{Fore.CYAN}{'='*35}{Style.RESET_ALL}")
+
+    # Set the IP address to bind to
+    msg = f"\n{Fore.YELLOW}🙂 Enter the IP address of the server to connect to (default: {Fore.CYAN}{my_ip}{Fore.YELLOW}): {Style.RESET_ALL}"
+
+    # ask user whether to use localhost or their local IP address
+    myNew_ip = input(msg).strip()
+    if myNew_ip:
+        my_ip = "localhost"
+
+    msg = f"{Fore.GREEN}✅ Connecting to server at {my_ip}:{5555}...{Style.RESET_ALL}"
+    print(msg)
+
     # Create server instance
-    server = MessageServer(host='localhost', port=5555)
+    # server = MessageServer(host='localhost', port=5555)
+    server = MessageServer(host=my_ip, port=5555)
     
     try:
         # Start the server
@@ -308,6 +349,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 ```
 
 ![--- --- --- --- --- --- --- --- ---](../../graphics/div_bar.png)
@@ -403,17 +445,46 @@ From the `tutorials/` directory (where you initialized the virtual environment),
 uv run tutorial_01/src/message_server.py
 ```
 
-You should see output like:
+### Understanding IP Address Selection
+
+When you start the server, it will display your local IP address and prompt you for configuration:
 
 ```
+===================================
+Your IP address is: 192.168.1.100
+===================================
+
+🙂 Enter the IP address of the server to connect to (default: 192.168.1.100):
+```
+
+**How it works:**
+
+1. **Automatic IP Detection**: The `get_local_ip()` function automatically detects your computer's IP address on the local network (e.g., `192.168.1.100`)
+
+2. **Two Connection Options**:
+   - **Press Enter (use detected IP)**: Server binds to your local IP address, allowing clients on your network to connect
+   - **Type anything and press Enter (use localhost)**: Server binds to `localhost` (127.0.0.1), only allowing connections from the same machine
+
+3. **When to use each option**:
+   - **Use localhost** (type anything): Testing on your own computer with multiple terminal windows
+   - **Use your IP** (press Enter): Allowing classmates to connect from other computers on the same network
+
+### Example Output
+
+After selecting your configuration, you should see output like:
+
+```
+✅ Connecting to server at 192.168.1.100:5555...
 ============================================================
 🚀 Message Server Started!
-📡 Listening on localhost:5555
+📡 Listening on 192.168.1.100:5555
 ⏳ Waiting for clients to connect...
 ============================================================
 ```
 
 **Keep this terminal window open** - the server needs to run continuously!
+
+**Important Note**: If you want clients from other computers to connect, **share your IP address** (e.g., `192.168.1.100`) with them. They'll need it to configure their client applications.
 
 ![--- --- --- --- --- --- --- --- ---](../../graphics/div_bar.png)
 

@@ -47,6 +47,12 @@ Response:
 
 TODO
 
+### Q5. Time permitting, try running some experiments with the text messaging app and write about your work here.
+
+Response:
+
+TODO 
+
 ---
 
 (Did you remember to add your name to the top of this document?)
