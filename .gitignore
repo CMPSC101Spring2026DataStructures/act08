@@ -1,0 +1,26 @@
+
+# Operating Systems #
+#####################
+
+# macOS #
+#########
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+###########
+# Software 
+###########
+.vscode/
+__pycache__/
+__pycache__
+*.log
+*.aux
+*.out
+.RData
+.RStudio
+.Rhistory
+.venv
+uv.lock
+

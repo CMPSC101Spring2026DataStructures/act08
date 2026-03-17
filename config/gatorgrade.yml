@@ -1,0 +1,41 @@
+# --> check the technical writing for various characteristics
+- writing/reflection.md:
+  - description: Ensure that reflection.md file exists in the writing/ directory
+    check: ConfirmFileExists
+  - description: Add your name to writing/reflection.md, then delete the 'Add your name here' placeholder 
+    check: MatchFileFragment
+    options:
+      fragment: "Add Your Name Here"
+      count: 0
+      exact: true
+  - description: Ensure no TODO items remain in the reflection
+    check: MatchFileFragment
+    options:
+      fragment: "TODO"
+      count: 0
+      exact: true
+  # - description: Ensure reflection contains substantial analysis in clear and meaningful language(minimum 100 words)
+  #   check: CountFileWords
+  #   options:
+  #     count: 100
+  #     exact: false
+
+# --> check that necessary files exist
+- ./tutorials/tutorial_01/src/message_server.py:
+  - description: Ensure that ./tutorials/tutorial_01/src/message_server.py file exists
+    check: ConfirmFileExists
+
+- ./tutorials/tutorial_02/src/message_client.py:
+  - description: Ensure that ./tutorials/tutorial_02/src/message_client.py file exists
+    check: ConfirmFileExists
+
+- ./tutorials/tutorial_03/src/game_client.py:
+  - description: Ensure that ./tutorials/tutorial_03/src/game_client.py file exists
+    check: ConfirmFileExists
+
+
+# count number of commits in the GitHub repository
+- description: Have at least a specific minimum number of commits (6) in repository. (That's two commits per tutorial!)
+  check: CountCommits
+  options:
+    count: 6
