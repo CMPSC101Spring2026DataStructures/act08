@@ -324,9 +324,10 @@ def main():
     msg = f"\n{Fore.YELLOW}🙂 Enter the IP address of the server to connect to (default: {Fore.CYAN}{my_ip}{Fore.YELLOW}): {Style.RESET_ALL}"
 
     # ask user whether to use localhost or their local IP address
-    myNew_ip = input(msg).strip()
-    if myNew_ip:
-        my_ip = "localhost"
+    myNew_ip = input(msg).strip() or my_ip
+    if myNew_ip.lower() != my_ip.lower():
+        my_ip = myNew_ip
+    print(f"{Fore.GREEN}✅ Using IP address: {my_ip}{Style.RESET_ALL}")
 
     msg = f"{Fore.GREEN}✅ Connecting to server at {my_ip}:{5555}...{Style.RESET_ALL}"
     print(msg)

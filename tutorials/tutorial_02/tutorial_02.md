@@ -121,7 +121,7 @@ class MessageClient:
             
             # Set a timeout for connection attempt (10 seconds)
             self.client_socket.settimeout(10)
-            
+            print(f"{Fore.YELLOW}🔍 Attempting to connect to server at {self.host} {Style.RESET_ALL}")
             print(f"{Fore.CYAN}🔌 Connecting to server at {self.host}:{self.port}...{Style.RESET_ALL}")
             
             # Connect to the server
@@ -316,9 +316,11 @@ def main():
     # Get the IP address to connect to
     msg = f"\n{Fore.YELLOW}🙂 Enter the IP address of the server to connect to (default: {Fore.CYAN}{my_ip}{Fore.YELLOW}): {Style.RESET_ALL}"
 
-    myNew_ip = input(msg).strip()
-    if myNew_ip:
-        my_ip = "localhost"
+    # ask user whether to use localhost or their local IP address
+    myNew_ip = input(msg).strip() or my_ip
+    if myNew_ip.lower() != my_ip.lower():
+        my_ip = myNew_ip
+    print(f"{Fore.GREEN}✅ Using IP address: {my_ip}{Style.RESET_ALL}")
 
     msg = f"{Fore.GREEN}✅ Connecting to server at {my_ip}:{5555}...{Style.RESET_ALL}"
     print(msg)
